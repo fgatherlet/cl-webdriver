@@ -1,0 +1,58 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  (ql:quickload '(:ya-selenium :series)
+                :silent t)
+  )
+
+(defpackage :ros.script.yas-google.3760825649
+  (:use 
+   :cl
+   :ya-selenium
+   :series
+   )
+  (:import-from
+   :alexandria
+   :when-let
+   :when-let*)
+  )
+(in-package :ros.script.yas-google.3760825649)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+
+  (let ((*yas-session*
+          (make-yas-session
+           (yas-obj
+            "browserName" "chrome"
+            "goog:chromeOptions"
+            (yas-obj
+             "args"
+             (list
+              ;; cannot launch multiple processes with the same user-data-dir.
+              ;;"--user-data-dir=~/dev/ql/ya-selenium/examples/chrome/"
+              ;;"--no-startup-window"
+              ;;"--headless"
+              ))))))
+    (unwind-protect
+         (progn
+           (setf (yas-url) "https://www.google.com")
+           (when-let* ((input (yas-find "//input[@name='q']")))
+             (yas-element-send-keys input "common lisp wikipedia
+")
+             (sleep 3)
+             (when-let ((aelems (yas-find-all "//a")))
+               (iterate ((pair
+                          (mapping ((aelem (scan aelems)))
+                            (let ((href (yas-element-attribute aelem "href"))
+                                  (text (yas-element-text aelem)))
+                              (cons href text)))))
+                 (format t "a:~a~%" pair)))
+             ;;(sleep 10)
+             ))
+      (delete-yas-session))))
+
