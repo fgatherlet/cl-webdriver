@@ -150,7 +150,8 @@
     (wd-post
      (wd-obj
       :text text
-      :value value)
+      :value value
+      )
      "element" (wd-element-to-id element) "value")))
 
 (defun wd-element-set-values (element &rest values)

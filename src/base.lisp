@@ -113,9 +113,13 @@ wd-ref obj \"ELEMENT\" is better. but geckodriver's key would be \"element-xxx\"
 
 (defun wd-make-capabilities-for-firefox (&key
                                             (headlessp nil)
-                                            (user-data-dir nil)
+                                            (profile nil)
                                             (user-agent nil)
                                        )
+  "you can specify profile name with :profile argument.
+you can create firefox profile with `firefox-bin -CreateProfile \"profile_name profile_dir\".
+ref: https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options
+ "
   (let* ((sub-obj-args '())
          (sub-obj-prefs (wd-obj))
          (sub-obj (wd-obj))
@@ -123,6 +127,8 @@ wd-ref obj \"ELEMENT\" is better. but geckodriver's key would be \"element-xxx\"
                "browserName" "firefox")))
     (when headlessp
       (push "-headless" sub-obj-args))
+    (when profile
+      (push (format nil "-P \"~s\"" profile) sub-obj-args))
     (when user-agent
       ;;(setf (wd-ref sub-obj-prefs "general.useragent.extra.firefox") (compile-user-agent user-agent)))
       (setf (wd-ref sub-obj-prefs "general.useragent.override") (compile-user-agent user-agent)

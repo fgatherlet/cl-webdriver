@@ -87,7 +87,10 @@ This function returns 3 values.
                       :content
                       (jsown:to-json
                        (wd-obj
-                        :capabilities (wd-obj)
+                        :capabilities (wd-obj
+                                       :first-match
+                                       (list desired-capabilities)
+                                       )
                         :desired-capabilities desired-capabilities)))
           (setq http-status status
                 response-source body))
