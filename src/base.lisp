@@ -128,7 +128,8 @@ ref: https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options
     (when headlessp
       (push "-headless" sub-obj-args))
     (when profile
-      (push (format nil "-P \"~s\"" profile) sub-obj-args))
+      ;;(push (format nil "-P \"~s\"" profile) sub-obj-args)
+      (push (format nil "--profile \"~s\"" profile) sub-obj-args))
     (when user-agent
       ;;(setf (wd-ref sub-obj-prefs "general.useragent.extra.firefox") (compile-user-agent user-agent)))
       (setf (wd-ref sub-obj-prefs "general.useragent.override") (compile-user-agent user-agent)
