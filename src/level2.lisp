@@ -27,3 +27,36 @@
         (setf (wd-window) (car diff))
       (error "can not create window"))))
 
+
+(defun wd-enable-tooltip ()
+  (wd-execute "
+function xpath(xpathq) {
+  var headings = document.evaluate(xpathq, document, null, XPathResult.ANY_TYPE, null );
+  var node = headings.iterateNext();
+  var result = [];
+  while (node) {
+    result.push(node);
+    node = headings.iterateNext();
+  }
+  return result;
+}
+var elms = xpath('//a');
+var i = 0;
+elms.forEach(elm=>{
+  elm.setAttribute('xid', `${i}`);
+  elm.textContent = `${i}-${elm.textContent}`;
+  i = i + 1;
+});
+
+function xref(id) {
+  var elm = xpath(`//a[@xid = ${id}]`)[0];
+  return elm;
+}
+"))
+(defun wd-click-tooltip (i)
+  (wd-element-click (wd-find (format nil "//a[@xid = ~a]" i))))
+
+(defun wd-page-up ()
+  (wd-actions (:keys :page-up)))
+(defun wd-page-down ()
+  (wd-actions (:keys :page-down)))

@@ -165,5 +165,10 @@
    ;;; ------------------------------ util
    :wd-wait-until
    :wd-google
+
+   :wd-enable-tooltip
+   :wd-click-tooltip
+   :wd-page-up
+   :wd-page-down
    ))
 
