@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+# without specifying marionette-port, create-session would be timeout.
+exec chpst -P geckodriver --log debug --marionette-port 2828
